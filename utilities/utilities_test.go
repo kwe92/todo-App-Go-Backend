@@ -3,10 +3,13 @@ package utilities
 import (
 	"fmt"
 	"net/http"
+	"net/http/httptest"
 	"net/url"
 	"strconv"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestGetId(t *testing.T) {
@@ -56,5 +59,23 @@ func TestParseURL(t *testing.T) {
 	fmt.Println("received url: ", received)
 
 	CompareTestResults(t, expected, received)
+
+}
+
+func TestSetHeader(t *testing.T) {
+	resp := httptest.NewRecorder()
+
+	fmt.Println(resp.Header())
+
+	SetHeader(resp)
+
+	expected := http.Header{"Content-Type": []string{"application/json"}}
+
+	actual := resp.Header()
+
+	fmt.Println("expected Header:", expected)
+	fmt.Println("actual Header:", actual)
+
+	assert.Equal(t, expected, actual)
 
 }
